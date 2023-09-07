@@ -14,7 +14,7 @@ import aSharp from '../pianokeysound/aSharp.mp3';
 
 
 const Test = () => {
-
+// define the state for piano keys
 const [pianoKey,setPianoKey]= useState({
     "c": {
         name:"c",
@@ -114,31 +114,29 @@ const [pianoKey,setPianoKey]= useState({
         mousepress:false,
         color:"white"
     },
-    
-    
-    
-    
-    
-
     })
 
   
 
+ // create refs to track key and mouse presses
 const isKeyPressed =useRef({});
 const isMousePressed =useRef({});
 
+
+// handle touch end event
 function handleTouchEnd(e,key) {
   e.preventDefault(); // Prevents the default touch behavior (e.g., zooming)
   handleKeyUp(key);
 }
+
+
+// handle key up event
 function handleKeyUp(e){
   let key = e;
   if(e.key){
     key=e.key;
   }
-  // console.log("handle key up", e.key, keyRelease)
   console.log("up",e)  
-  // setStyle((pre) => ({ ...pre, [key]: {} }));
   setPianoKey((pre)=>({...pre,[key]:{
     ...pre[key],
     style:{}
@@ -147,12 +145,13 @@ function handleKeyUp(e){
     isMousePressed.current[key]=false;
   }
 
+  
+  
+  // apply styling to piano keys
   function styleKey(key, color) {
     isKeyPressed.current[key]=true;
     isMousePressed.current[key]=true;
     if (color == "black") {
-      
-
       setPianoKey((pre)=>(
        { ...pre,
         [key]:{
@@ -161,12 +160,9 @@ function handleKeyUp(e){
             backgroundColor: "rgb(41, 41, 41)",
             height: "65%"
           }
-         
         }}
       ))
-
     } else {
-      
       setPianoKey((pre)=>(
         { ...pre,
          [key]:{
@@ -174,24 +170,23 @@ function handleKeyUp(e){
            style:{
              backgroundColor: "rgb(157, 156, 156)",
              height: "95%"
-           }
-          
+           }  
          }}
        ))
     }
-  
-  
-
   }
 
+
+
+  // play a sound when a key is pressed
   function playSound(note) {
     let Sound = new Audio(note);
     Sound.play();
   }
 
+  
+  // handle key press event
   function handleKeyPress(e) {
-    console.log("85")
-
     let key = e;
     if(e.key){
       key = e.key
@@ -199,10 +194,8 @@ function handleKeyUp(e){
     if(!isKeyPressed.current[key] || !isMousePressed.current[key]){
       switch (key) {
         case "c":
-          
           playSound(c);
           styleKey("c","white")
-
           break;
   
         case "d":
@@ -268,17 +261,29 @@ function handleKeyUp(e){
     
   }
 
+  
+  
   useEffect(() => {
-    
+    //add event listner for ker press and ker release
     window.addEventListener("keyup",handleKeyUp)
     window.addEventListener("keydown", handleKeyPress)
+
+    //return a cleanup function to remove event listeners
+  return () => {
+    window.removeEventListener('keyup', handleKeyUp);
+    window.removeEventListener('keydown', handleKeyPress);
+  };
   }, [])
+
+
+
   return (
-    <div className='piano-container'>
+    <div className='piano-container' style={{ userSelect: 'none' }}>
       {Object.entries(pianoKey).map(([key, value], ind) => (
         <div key={key}>
           {value.color === 'white' ? (
             <div
+            
               className='key'
               style={value.style}
               onMouseDown={() => {
