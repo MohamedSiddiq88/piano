@@ -300,7 +300,7 @@ function handleKeyUp(e){
                   onMouseUp={(e) => { e.stopPropagation(); handleKeyUp(value.pair); }}
                   onTouchStart={(e) => {
                     e.stopPropagation();
-                    handleKeyPress(key);
+                    handleKeyPress(value.pair);
                   }}
                   onTouchEnd={(e) => {e.stopPropagation();handleTouchEnd(e, value.pair)}} 
                 >
