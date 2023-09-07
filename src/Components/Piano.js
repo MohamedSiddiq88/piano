@@ -14,103 +14,187 @@ import aSharp from '../pianokeysound/aSharp.mp3';
 
 
 const Piano = () => {
+// define the state for piano keys
+const [pianoKey,setPianoKey]= useState({
+    "c": {
+        name:"c",
+        pair:"j",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    "j": {
+        name:"j",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"black"
+    },
+    "d": {
+        name:"d",
+        pair:"k",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    "k": {
+        name:"k",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"black"
+    },
+    "e": {
+        name:"e",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    "f": {
+        name:"f",
+        pair:"l",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    "l": {
+        name:"l",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"black"
+    },
+    "g": {
+        name:"g",
+        pair:"m",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    "m": {
+        name:"m",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"black"
+    },
+    
+    "a": {
+        name:"a",
+        pair:"n",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    "n": {
+        name:"n",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"black"
+    },
+   
+    "b": {
+        name:"b",
+        pair:"",
+        style:{},
+        keypress:false,
+        mousepress:false,
+        color:"white"
+    },
+    })
 
-  const [style, setStyle] = useState({
+  
 
-    "c": {},
-    "d": {},
-    "e": {},
-    "f": {},
-    "g": {},
-    "a": {},
-    "b": {},
-    "j": {},
-    "k": {},
-    "l": {},
-    "m": {},
-    "n": {},
-  });
-
-  // const [keyRelease, setKeyRelease] = useState({
-
-  //   "c": true,
-  //   "d": true,
-  //   "e": true,
-  //   "f": true,
-  //   "g": true,
-  //   "a": true,
-  //   "b": true,
-  //   "j": true,
-  //   "k": true,
-  //   "l": true,
-  //   "m": true,
-  //   "n": true,
-  // });
-
+ // create refs to track key and mouse presses
 const isKeyPressed =useRef({});
 const isMousePressed =useRef({});
 
 
+// handle touch end event
+function handleTouchEnd(e,key) {
+  e.preventDefault(); // prevents the default touch behavior (ex: zooming)
+  handleKeyUp(key);
+}
+
+
+// handle key up event
 function handleKeyUp(e){
   let key = e;
   if(e.key){
     key=e.key;
   }
-  // console.log("handle key up", e.key, keyRelease)
-  console.log("up",e)  
-  setStyle((pre) => ({ ...pre, [key]: {} }));
+  setPianoKey((pre)=>({...pre,[key]:{
+    ...pre[key],
+    style:{}
+  }}))
     isKeyPressed.current[key]=false;
     isMousePressed.current[key]=false;
   }
 
+  
+  
+  // apply styling to piano keys
   function styleKey(key, color) {
     isKeyPressed.current[key]=true;
     isMousePressed.current[key]=true;
     if (color == "black") {
-      setStyle((pre) => ({
-        ...pre,
-        [key]: {
-          backgroundColor: "rgb(41, 41, 41)",
-          height: "65%"
-        }
-      }))
-
+      setPianoKey((pre)=>(
+       { ...pre,
+        [key]:{
+          ...pre[key],
+          style:{
+            backgroundColor: "rgb(41, 41, 41)",
+            height: "65%"
+          }
+        }}
+      ))
     } else {
-      setStyle((pre) => ({
-        ...pre, [key]: {
-          backgroundColor: "rgb(157, 156, 156)",
-          height: "95%"
-        },
-      }));
-
+      setPianoKey((pre)=>(
+        { ...pre,
+         [key]:{
+           ...pre[key],
+           style:{
+             backgroundColor: "rgb(157, 156, 156)",
+             height: "95%"
+           }  
+         }}
+       ))
     }
-    // console.log("type",type)
-  
-  
-
   }
 
+
+
+  // play a sound when a key is pressed
   function playSound(note) {
     let Sound = new Audio(note);
     Sound.play();
   }
 
+  
+  // handle key press event
   function handleKeyPress(e) {
-    console.log("85")
-
-    // console.log("type in",e.type)
     let key = e;
     if(e.key){
       key = e.key
     }
-    // console.log(key)
     if(!isKeyPressed.current[key] || !isMousePressed.current[key]){
       switch (key) {
         case "c":
-          
           playSound(c);
           styleKey("c","white")
-
           break;
   
         case "d":
@@ -176,60 +260,64 @@ function handleKeyUp(e){
     
   }
 
+  
+  
   useEffect(() => {
-    
+    //add event listner for ker press and ker release
     window.addEventListener("keyup",handleKeyUp)
     window.addEventListener("keydown", handleKeyPress)
+
+    //return a cleanup function to remove event listeners
+  return () => {
+    window.removeEventListener('keyup', handleKeyUp);
+    window.removeEventListener('keydown', handleKeyPress);
+  };
   }, [])
+
+
+
   return (
-    <div className='piano-container'>
-      <div className="key" style={style.c} onMouseDown={()=>{handleKeyPress("c")}} onMouseUp={()=>{handleKeyUp("c")}}>
-      <div className='hash-key' style={style.j}  onMouseDown={(e)=>{e.stopPropagation();handleKeyPress("j")}} onMouseUp={(e)=>{e.stopPropagation();handleKeyUp("j")}}>
-        <p className='hash-key-name'>j</p>
+    <div className='piano-container' style={{ userSelect: 'none' }}>
+      {Object.entries(pianoKey).map(([key, value], ind) => (
+        <div key={key}>
+          {value.color === 'white' ? (
+            <div
+            
+              className='key'
+              style={value.style}
+              onMouseDown={() => {
+                handleKeyPress(key);
+              }}
+              onMouseUp={() => {
+                handleKeyUp(key);
+              }}
+              onTouchStart={() => {
+                handleKeyPress(key);
+              }}
+              onTouchEnd={(e) => handleTouchEnd(e, key)} 
+            >
+              {(value.pair) ? (
+                <div
+                  className='hash-key'
+                  style={pianoKey[value.pair].style}
+                  onMouseDown={(e) => { e.stopPropagation(); handleKeyPress(value.pair); }}
+                  onMouseUp={(e) => { e.stopPropagation(); handleKeyUp(value.pair); }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    handleKeyPress(value.pair);
+                  }}
+                  onTouchEnd={(e) => {e.stopPropagation();handleTouchEnd(e, value.pair);}} 
+                >
+                  <p className='hash-key-name'>{value.pair}</p>
+                </div>
+              ) : null}
+              <p className='key-name'>{key.toUpperCase()}</p>
+            </div>
+          ) : null}
         </div>
-        <p className='key-name'>C</p>
-      </div>
-      
-
-      <div className="key" style={style.d} onMouseDown={()=>{handleKeyPress("d")}} onMouseUp={()=>{handleKeyUp("d")}}>
-        <div className='hash-key'style={style.k} onMouseDown={(e)=>{e.stopPropagation(); handleKeyPress("k")}} onMouseUp={(e)=>{e.stopPropagation(); handleKeyUp("k")}}>
-        <p className='hash-key-name'>k</p>
-        </div>
-        <p className='key-name'>D</p>
-      </div>
-
-      <div className="key" style={style.e} onMouseDown={()=>{handleKeyPress("e")}} onMouseUp={()=>{handleKeyUp("e")}}>
-        <p className='key-name'>E</p>
-      </div>
-
-      <div className="key" style={style.f} onMouseDown={()=>{handleKeyPress("f")}} onMouseUp={()=>{handleKeyUp("f")}}>
-        <div className='hash-key'style={style.l} onMouseDown={(e)=>{e.stopPropagation();handleKeyPress("l")}} onMouseUp={(e)=>{e.stopPropagation();handleKeyUp("l")}}>
-        <p className='hash-key-name'>l</p>
-        </div>
-        <p className='key-name'>F</p>
-      </div>
-
-      <div className="key" style={style.g} onMouseDown={()=>{handleKeyPress("g")}} onMouseUp={()=>{handleKeyUp("g")}}>
-        <div className='hash-key'style={style.m} onMouseDown={(e)=>{e.stopPropagation();handleKeyPress("m")}} onMouseUp={(e)=>{e.stopPropagation();handleKeyUp("m")}}>
-        <p className='hash-key-name'>m</p>
-        </div>
-        <p className='key-name'>G</p>
-      </div>
-
-      <div className="key" style={style.a} onMouseDown={()=>{handleKeyPress("a")}} onMouseUp={()=>{handleKeyUp("a")}}>
-        <div className='hash-key'style={style.n} onMouseDown={(e)=>{e.stopPropagation();handleKeyPress("n")}} onMouseUp={(e)=>{e.stopPropagation();handleKeyUp("n")}}>
-        <p className='hash-key-name'>n</p>
-        </div>
-        <p className='key-name'>A</p>
-      </div>
-
-      <div className="key" style={style.b} onMouseDown={()=>{handleKeyPress("b")}} onMouseUp={()=>{handleKeyUp("b")}}>
-        <p className='key-name'>B</p>
-      </div>
-
-
+      ))}
     </div>
-  )
+  );
 }
 
 export default Piano
