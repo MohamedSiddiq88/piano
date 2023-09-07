@@ -298,7 +298,8 @@ function handleKeyUp(e){
                   style={pianoKey[value.pair].style}
                   onMouseDown={(e) => { e.stopPropagation(); handleKeyPress(value.pair); }}
                   onMouseUp={(e) => { e.stopPropagation(); handleKeyUp(value.pair); }}
-                  onTouchStart={() => {
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
                     handleKeyPress(key);
                   }}
                   onTouchEnd={(e) => {e.stopPropagation();handleTouchEnd(e, value.pair)}} 
