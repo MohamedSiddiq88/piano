@@ -35,7 +35,7 @@ background-color: white;
 }
 
 .hash-key{
-  height: 70%;
+  height: 2010;
   width: 52px;
 background-color: black;
   border-bottom-left-radius: 0.5rem;
@@ -105,6 +105,8 @@ background-color: black;
   .hash-key {
     left: 7vw;
     width: 7vw;
+    height: 210px;
+
   }
 
   .key-name,
