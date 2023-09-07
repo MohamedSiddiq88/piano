@@ -1,22 +1,16 @@
 import logo from './logo.svg';
-import './App.css';
+// import './App.css';
+import './Test.css'
+import Piano from './Components/Piano';
+import Test from './Test/Test';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {/* <Piano/> */}
+        <Test/>
+        <p className='message'>please rotate your device</p>
       </header>
     </div>
   );
