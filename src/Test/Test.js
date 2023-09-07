@@ -290,7 +290,7 @@ function handleKeyUp(e){
               onTouchStart={() => {
                 handleKeyPress(key);
               }}
-              onTouchEnd={(e) => handleTouchEnd(e, key)} // Pass the event and key here
+              onTouchEnd={(e) => handleTouchEnd(e, key)} 
             >
               {(value.pair) ? (
                 <div
@@ -298,7 +298,10 @@ function handleKeyUp(e){
                   style={pianoKey[value.pair].style}
                   onMouseDown={(e) => { e.stopPropagation(); handleKeyPress(value.pair); }}
                   onMouseUp={(e) => { e.stopPropagation(); handleKeyUp(value.pair); }}
-                  onTouchEnd={(e) => handleTouchEnd(e, value.pair)} // Pass the event and key here
+                  onTouchStart={() => {
+                    handleKeyPress(key);
+                  }}
+                  onTouchEnd={(e) => {e.stopPropagation();handleTouchEnd(e, value.pair)}} 
                 >
                   <p className='hash-key-name'>{value.pair}</p>
                 </div>
