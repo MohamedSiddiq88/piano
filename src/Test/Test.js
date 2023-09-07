@@ -302,7 +302,7 @@ function handleKeyUp(e){
                     e.stopPropagation();
                     handleKeyPress(value.pair);
                   }}
-                  onTouchEnd={(e) => {e.stopPropagation();handleTouchEnd(e, value.pair)}} 
+                  onTouchEnd={(e) => {e.stopPropagation();handleTouchEnd(e, value.pair);}} 
                 >
                   <p className='hash-key-name'>{value.pair}</p>
                 </div>
