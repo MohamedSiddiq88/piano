@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 // import './Test.css'
 import Piano from './Components/Piano';
